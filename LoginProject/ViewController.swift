@@ -127,7 +127,7 @@ final class ViewController: UIViewController {
         button.backgroundColor = .clear
         button.setTitle("비밀번호 재설정", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        button.addTarget(self, action: #selector(resetButtonTapped  ), for: .touchUpInside)
+        button.addTarget(self, action: #selector(resetButtonTapped  ), for: .touchUpInside) //selecter를 사용하여 다른 함수 실행
         return button
     }()
     
@@ -155,43 +155,47 @@ final class ViewController: UIViewController {
     
     // 오토레이아웃
     private func setupAutoLayout() {
-        // email 필드 auto layout
-        // 레이블에 대한 레이아웃
         emailInfoLabel.translatesAutoresizingMaskIntoConstraints = false
+        emailTextField.translatesAutoresizingMaskIntoConstraints = false
+        passwordInfoLabel.translatesAutoresizingMaskIntoConstraints = false
+        passwordTextField.translatesAutoresizingMaskIntoConstraints = false
+        passwordSecureButton.translatesAutoresizingMaskIntoConstraints = false
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        passwordResetButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        // email 필드 auto layout
         // auto layout을 간결하게 만드는 방법
         NSLayoutConstraint.activate([
+            // 레이블에 대한 레이아웃
             emailInfoLabel.leadingAnchor.constraint(equalTo: emailTextFieldView.leadingAnchor, constant: 8),
             emailInfoLabel.trailingAnchor.constraint(equalTo: emailTextFieldView.trailingAnchor, constant: -8),
-            emailInfoLabelCenterYConstraint
+            emailInfoLabelCenterYConstraint,
+            
+            // 텍스트필드 레이아웃
+            emailTextField.topAnchor.constraint(equalTo: emailTextFieldView.topAnchor, constant: 15),
+            emailTextField.bottomAnchor.constraint(equalTo: emailTextFieldView.bottomAnchor, constant: -2),
+            emailTextField.leadingAnchor.constraint(equalTo: emailTextFieldView.leadingAnchor, constant: 8),
+            emailTextField.trailingAnchor.constraint(equalTo: emailTextFieldView.trailingAnchor, constant: -8)
         ])
-        
-        // 텍스트필드 레이아웃
-        emailTextField.translatesAutoresizingMaskIntoConstraints = false
-        emailTextField.topAnchor.constraint(equalTo: emailTextFieldView.topAnchor, constant: 15).isActive = true
-        emailTextField.bottomAnchor.constraint(equalTo: emailTextFieldView.bottomAnchor, constant: -2).isActive = true
-        emailTextField.leadingAnchor.constraint(equalTo: emailTextFieldView.leadingAnchor, constant: 8).isActive = true
-        emailTextField.trailingAnchor.constraint(equalTo: emailTextFieldView.trailingAnchor, constant: -8).isActive = true
         
         // password 필드 auto layout
         // 레이블 레이아웃
-        passwordInfoLabel.translatesAutoresizingMaskIntoConstraints = false
         passwordInfoLabel.leadingAnchor.constraint(equalTo: passwordTextFieldView.leadingAnchor, constant: 8).isActive = true
         passwordInfoLabel.trailingAnchor.constraint(equalTo: passwordTextFieldView.trailingAnchor, constant: -8).isActive = true
         passwordInfoLabelCenterYConstraint.isActive = true
+        
         // 텍스트필드 레이아웃
-        passwordTextField.translatesAutoresizingMaskIntoConstraints = false
         passwordTextField.topAnchor.constraint(equalTo: passwordTextFieldView.topAnchor, constant: 15).isActive = true
         passwordTextField.bottomAnchor.constraint(equalTo: passwordTextFieldView.bottomAnchor, constant: -2).isActive = true
         passwordTextField.leadingAnchor.constraint(equalTo: passwordTextFieldView.leadingAnchor, constant: 8).isActive = true
         passwordTextField.trailingAnchor.constraint(equalTo: passwordTextFieldView.trailingAnchor, constant: -8).isActive = true
+        
         // 표시버튼 레이아웃
-        passwordSecureButton.translatesAutoresizingMaskIntoConstraints = false
         passwordSecureButton.topAnchor.constraint(equalTo: passwordTextFieldView.topAnchor, constant: 15).isActive = true
         passwordSecureButton.bottomAnchor.constraint(equalTo: passwordTextFieldView.bottomAnchor, constant: -15).isActive = true
         passwordSecureButton.trailingAnchor.constraint(equalTo: passwordTextFieldView.trailingAnchor, constant: -8).isActive = true
         
         // 스택뷰 레이아웃
-        stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true // 가로 중앙
         stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true // 세로 중앙
         stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30).isActive = true
@@ -199,7 +203,6 @@ final class ViewController: UIViewController {
         stackView.heightAnchor.constraint(equalToConstant: textViewHeight*3 + 36).isActive = true
         
         // 리셋버튼 레이아웃
-        passwordResetButton.translatesAutoresizingMaskIntoConstraints = false
         passwordResetButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 10).isActive = true
         passwordResetButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30).isActive = true
         passwordResetButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30).isActive = true
@@ -211,6 +214,7 @@ final class ViewController: UIViewController {
     // MARK: - 비밀번호 가리기 모드 켜고 끄기
     @objc private func passwordSecureModeSetting() {
         // 이미 텍스트필드에 내장되어 있는 기능
+        // 텍스트 필드의 글자를 안보이게 숨기는 기능
         passwordTextField.isSecureTextEntry.toggle()
     }
     
@@ -221,9 +225,9 @@ final class ViewController: UIViewController {
     }
     
     // 리셋버튼이 눌리면 동작하는 함수
-    @objc func resetButtonTapped() {
+    @objc func resetButtonTapped() {    //selecter를 사용했기 때문에 @object를 사용해야 함
         //만들기
-        let alert = UIAlertController(title: "비밀번호 바꾸기", message: "비밀번호를 바꾸시겠습니까?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "비밀번호 바꾸기", message: "비밀번호를 바꾸시겠습니까?", preferredStyle: .alert) // alert 창 생성
         let success = UIAlertAction(title: "확인", style: .default) { action in
             print("확인버튼이 눌렸습니다.")
         }
